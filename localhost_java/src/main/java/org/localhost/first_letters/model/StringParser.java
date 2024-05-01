@@ -3,29 +3,26 @@ package org.localhost.first_letters.model;
 public class StringParser {
 
 
-    public String parseString(String input) {
-        String[] inputAsArray = input.split(" ");
-        for (int i = 0; i < inputAsArray.length; i++) {
-            String word = inputAsArray[i];
-            char firstLetter = word.charAt(0);
-            if (!isUppercase(firstLetter)) {
-                word = transformWord(word, firstLetter);
+    public String capitalizeFirstLetters(String input) {
+        String[] inputWords = input.split(" ");
+        String[] resultWords = new String[inputWords.length];
+
+        for (int i = 0; i < inputWords.length; i++) {
+            String word = inputWords[i];
+            if (Character.isLowerCase(word.charAt(0))) {
+                word = capitalizeFirstLetter(word);
             }
-            inputAsArray[i] = word;
+            resultWords[i] = word;
         }
-        System.out.println(String.join(" ", inputAsArray));
-        return String.join(" ", inputAsArray);
+        String result = String.join(" ", resultWords);
+        System.out.println(result);
+        return result;
     }
 
-    private boolean isUppercase(char letter) {
-        return Character.isUpperCase(letter);
-    }
 
-    private String transformWord(String input, char firstLetter) {
-        char firstLetterToUpperCase = Character.toUpperCase(firstLetter);
-        String[] wordAsArray = input.split("");
-        wordAsArray[0] = String.valueOf(firstLetterToUpperCase);
-        input = String.join("", wordAsArray);
-        return input;
+
+    private String capitalizeFirstLetter(String word) {
+        String firstLetter = word.substring(0, 1).toUpperCase();
+        return firstLetter + word.substring(1);
     }
 }
