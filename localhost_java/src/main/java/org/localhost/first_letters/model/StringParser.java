@@ -1,5 +1,10 @@
 package org.localhost.first_letters.model;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class StringParser {
 
 
@@ -14,9 +19,19 @@ public class StringParser {
             }
             resultWords[i] = word;
         }
+
         String result = String.join(" ", resultWords);
+
         System.out.println(result);
+        //Stream, List
         return result;
+    }
+
+    public String capitalizeFirstLettersWithStream(String input) {
+        String[] inputWord = input.split(" ");
+        String resultString = Stream.of(inputWord)
+                .reduce("", (result, next) -> result + " " + capitalizeFirstLetter(next));
+        return resultString;
     }
 
 
