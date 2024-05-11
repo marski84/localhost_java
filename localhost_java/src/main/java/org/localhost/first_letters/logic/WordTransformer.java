@@ -16,6 +16,8 @@ public class WordTransformer {
                 "including versions of Lorem Ipsum.";
 
 //        stringParser.capitalizeFirstLetters(inputString);
-        stringParser.capitalizeFirstLettersWithStream(inputString);
+//        stringParser.capitalizeFirstLettersWithStream(inputString);
+//        System.out.println(        stringParser.capitalizeFirstLettersWithStream(inputString));
+//        stringParser.capitalizeFirstLettersUsingList(inputString);
     }
 }
