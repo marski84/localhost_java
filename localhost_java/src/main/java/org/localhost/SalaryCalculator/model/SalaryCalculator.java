@@ -1,84 +1,71 @@
 package org.localhost.SalaryCalculator.model;
 
+import org.localhost.SalaryCalculator.Taxes;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Map;
 
+// POJO -> plain old java object
+// SalaryCalculatorBase
 public class SalaryCalculator implements Calculator{
-    private Locale defaultLocale = Locale.getDefault();
-    private final String PL_ID = "pl_PL";
-    private final String GER_ID = "ger_Ger";
-    private final BigDecimal INIT_TAX = BigDecimal.valueOf(0);
+    private static final String PL_ID = "pl_PL";
+    private static final String GER_ID = "ger_Ger";
+    private static final BigDecimal INIT_TAX = BigDecimal.valueOf(0);
+    private static final BigDecimal MIN_SALARY = new BigDecimal("1.00");
+    private final Locale defaultLocale = Locale.getDefault();
     private Map<String, Double> taxes;
-
-    public SalaryCalculator() {
-    }
-
-
 
     @Override
     public BigDecimal calculateSalary(BigDecimal salary) {
-        BigDecimal totalTax = INIT_TAX;
+        validateSalary(salary);
 
         if (String.valueOf(defaultLocale).equals(PL_ID)) {
-            this.taxes = Taxes.PL_TAXES;
+            this.taxes = Taxes.PL_TAXES.getTaxes();
 
         }
         if (String.valueOf(defaultLocale).equals(GER_ID)) {
-            this.taxes = Taxes.GER_TAXES;
+            this.taxes = Taxes.GER_TAXES.getTaxes();
         }
-
-        for (double taxValue: taxes.values()) {
-            BigDecimal tax = this.calculateTax(taxValue, salary);
-            totalTax = totalTax.add(tax);
-        }
-        BigDecimal formatedSalary = salary.subtract(totalTax).setScale(2, RoundingMode.HALF_UP);
-        return formatedSalary;
+        return calculateNetSalary(salary);
     }
+
+
 
     @Override
     public BigDecimal calculateSalary(BigDecimal salary, Map<String, Double> taxes) {
+        validateSalary(salary);
+        validateTaxes(taxes);
+
+        this.taxes = taxes;
+        return calculateNetSalary(salary);
+    }
+
+    private BigDecimal calculateNetSalary(BigDecimal salary) {
         BigDecimal totalTax = INIT_TAX;
-
-        for (double taxValue: taxes.values()) {
-            BigDecimal tax = this.calculateTax(taxValue, salary);
-            totalTax = totalTax.add(tax);
+        for ( Map.Entry<String, Double> tax : taxes.entrySet()) {
+            totalTax = totalTax.add(calculateTax(tax.getValue(), salary));
         }
-
-        BigDecimal formatedSalary = salary.subtract(totalTax).setScale(2, RoundingMode.HALF_UP);
-        return formatedSalary;
+        return salary.subtract(totalTax).setScale(2, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calculateTax(double taxRate, BigDecimal salary) {
         return salary.multiply(new BigDecimal(taxRate));
     }
 
-    public Locale getDefaultLocale() {
-        return defaultLocale;
+    private Exception validateSalary(BigDecimal salary) {
+        if (salary.compareTo(MIN_SALARY) == -1) {
+            throw new ArithmeticException("Provided salary is too low!");
+        }
+        return null;
     }
 
-
-    public Map<String, Double> getTaxes() {
-        return taxes;
+    private Exception validateTaxes(Map<String, Double> taxes) {
+        if(taxes.isEmpty()) {
+            throw new InputMismatchException("Provided taxes do not contain any info");
+        }
+        return null;
     }
-
-
-
-    private static class Taxes {
-        static public final Map<String, Double> PL_TAXES = Map.of(
-                "incomeTax", 0.12,
-                "healthInsuranceContribution", 0.09,
-                "pensionInsuracne", 0.0976,
-                "disabilityInsurance", 0.015,
-                "sicknessInsurance", 0.0245);
-
-        static public final Map<String, Double> GER_TAXES = Map.of(
-                "incomeTax", 0.3,
-                "healthInsuranceContribution", 0.2,
-                "pensionInsuracne", 0.03,
-                "disabilityInsurance", 0.03,
-                "sicknessInsurance", 0.03);
-    }
-
 }

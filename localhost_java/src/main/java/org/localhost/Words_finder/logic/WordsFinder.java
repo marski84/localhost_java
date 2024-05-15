@@ -1,5 +1,6 @@
 package org.localhost.Words_finder.logic;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class WordsFinder {
 
@@ -9,7 +10,7 @@ public class WordsFinder {
         String cleanText = inputText.replaceAll("[\\p{Punct}&&[^']]", "");
         String[] inputArray = cleanText.split(" ");
 
-        List<String> sortedStringList = new ArrayList<String>(Arrays.asList(inputArray))
+        List<String> sortedStringList = new ArrayList<>(Arrays.asList(inputArray))
                 .stream()
                 .sorted()
                 .toList();
@@ -22,6 +23,9 @@ public class WordsFinder {
     }
 
     private void handleAddToMap(String word, Map<String, Integer> wordsMap) {
+        //groupingBy()
+        //Collectors.toMap()
+
         if (!wordsMap.containsKey(word)) {
             wordsMap.put(word.toLowerCase(), 1);
         } else {
