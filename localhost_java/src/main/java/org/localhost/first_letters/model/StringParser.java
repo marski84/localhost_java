@@ -1,14 +1,14 @@
 package org.localhost.first_letters.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StringParser {
 
 
     public String capitalizeFirstLetters(String input) {
+        validateInput(input);
 
         String[] inputWords = input.split(" ");
         String[] resultWords = new String[inputWords.length];
@@ -29,6 +29,7 @@ public class StringParser {
     }
 
     public String capitalizeFirstLettersWithStream(String input) {
+        validateInput(input);
         String[] inputWord = input.split(" ");
         String resultString = Stream.of(inputWord)
                 .reduce("", (result, next) -> result + " " + capitalizeFirstLetter(next));
@@ -38,23 +39,22 @@ public class StringParser {
     public String capitalizeFirstLettersUsingList(String input) {
         //        tutaj pytanie czy celem było przećwiczenie List i możliwych operacji- bo w docelowym rozwiązaniu
         //        zwróciłbym String z list
-        List list = new ArrayList<String>();
-        List resultList = new ArrayList<String>();
         String resultWord = "";
 
         String[] inputWords = input.split(" ");
-        for (String word : inputWords) {
-            list.add(word);
-        }
 
-        ListIterator<String> listIterator = list.listIterator();
+        String processedWord = Arrays.stream(inputWords)
+                .map(word -> capitalizeFirstLetter(word))
+                .collect(Collectors.joining(" "));
+
+        List<String> listWithMap = Stream.of(input.split(" "))
+                .map(word -> capitalizeFirstLetter(word)).toList();
 
 
-        while (listIterator.hasNext()) {
-            String capitalizedWord = capitalizeFirstLetters(listIterator.next());
-            resultList.add(capitalizedWord);
-        }
-        resultWord = String.join(" ", resultList).trim();
+        System.out.println(
+                listWithMap.stream().collect(Collectors.joining(" ")));
+
+
         return resultWord;
     }
 
@@ -62,5 +62,12 @@ public class StringParser {
     private String capitalizeFirstLetter(String word) {
         String firstLetter = word.substring(0, 1).toUpperCase();
         return firstLetter + word.substring(1);
+    }
+
+    private Exception validateInput(String input) {
+        if(input.length() < 1) {
+            throw new InputMismatchException("Provided string is too short!");
+        }
+        return null;
     }
 }

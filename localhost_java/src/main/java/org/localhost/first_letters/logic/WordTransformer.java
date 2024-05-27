@@ -2,6 +2,8 @@ package org.localhost.first_letters.logic;
 
 import org.localhost.first_letters.model.StringParser;
 
+import java.util.InputMismatchException;
+
 public class WordTransformer {
     public static void main(String[] args) {
         StringParser stringParser = new StringParser();
@@ -15,7 +17,11 @@ public class WordTransformer {
                 "and more recently with desktop publishing software like Aldus PageMaker " +
                 "including versions of Lorem Ipsum.";
 
-//        stringParser.capitalizeFirstLetters(inputString);
+        try {
+            stringParser.capitalizeFirstLettersUsingList(inputString);
+        } catch (InputMismatchException e) {
+            System.out.println(e);
+        }
 //        stringParser.capitalizeFirstLettersWithStream(inputString);
 //        System.out.println(        stringParser.capitalizeFirstLettersWithStream(inputString));
 //        stringParser.capitalizeFirstLettersUsingList(inputString);
