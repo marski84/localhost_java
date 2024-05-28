@@ -37,8 +37,7 @@ public class StringParser {
     }
 
     public String capitalizeFirstLettersUsingList(String input) {
-        //        tutaj pytanie czy celem było przećwiczenie List i możliwych operacji- bo w docelowym rozwiązaniu
-        //        zwróciłbym String z list
+        validateInput(input);
         String resultWord = "";
 
         String[] inputWords = input.split(" ");
@@ -55,6 +54,8 @@ public class StringParser {
                 listWithMap.stream().collect(Collectors.joining(" ")));
 
 
+        resultWord = listWithMap.stream().collect(Collectors.joining(" "));
+        resultWord = processedWord;
         return resultWord;
     }
 

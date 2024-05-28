@@ -12,14 +12,7 @@ public class WordsFinder {
         String cleanText = inputText.replaceAll("[\\p{Punct}&&[^']]", "");
         String[] inputArray = cleanText.split(" ");
 
-//        List<String> sortedStringList = new ArrayList<>(Arrays.asList(inputArray))
-//                .stream()
-//                .sorted()
-//                .toList();
-//
-//        for (String word : sortedStringList) {
-//            handleAddToMap(word, wordsMap);
-//        }
+
         TreeMap<String, Integer> resultMap = new TreeMap<>(Arrays.stream(inputArray)
                 .sorted()
                 .collect(
@@ -44,17 +37,5 @@ public class WordsFinder {
 
 
         return wordsMap;
-    }
-
-    private void handleAddToMap(String word, Map<String, Integer> wordsMap) {
-        //groupingBy()
-        //Collectors.toMap()
-
-
-        if (!wordsMap.containsKey(word)) {
-            wordsMap.put(word.toLowerCase(), 1);
-        } else {
-            wordsMap.put(word, wordsMap.get(word) + 1);
-        }
     }
 }
